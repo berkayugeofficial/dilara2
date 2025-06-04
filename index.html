@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Çiçekler</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: radial-gradient(circle, #ffe0f0, #e0ccff);
+      height: 100vh;
+    }
+
+    .flower {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      pointer-events: none;
+      animation: float 8s linear forwards;
+    }
+
+    .petal {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      border-radius: 50%;
+      opacity: 0;
+      transform: scale(0) rotate(0deg);
+      animation: bloom 2s ease-out forwards;
+    }
+
+    .petal:nth-child(1) {
+      top: 0;
+      left: 15px;
+      animation-delay: 0.1s;
+    }
+    .petal:nth-child(2) {
+      top: 15px;
+      left: 0;
+      animation-delay: 0.2s;
+    }
+    .petal:nth-child(3) {
+      top: 15px;
+      left: 30px;
+      animation-delay: 0.3s;
+    }
+    .petal:nth-child(4) {
+      top: 30px;
+      left: 15px;
+      animation-delay: 0.4s;
+    }
+
+    .center {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background-color: #ffd700;
+      border-radius: 50%;
+      top: 18px;
+      left: 18px;
+      opacity: 0;
+      transform: scale(0);
+      animation: centerBloom 1s ease-out 0.5s forwards;
+    }
+
+    @keyframes bloom {
+      0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.2) rotate(180deg);
+        opacity: 0.7;
+      }
+      100% {
+        transform: scale(1) rotate(360deg);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes centerBloom {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.3);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) scale(1) rotate(0deg);
+        opacity: 1;
+      }
+      15% {
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) scale(0.5) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Çiçek açılırken hafif parıltı efekti */
+    .flower::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 2s ease-out forwards;
+    }
+
+    @keyframes sparkle {
+      0% {
+        opacity: 0;
+        transform: scale(0);
+      }
+      30% {
+        opacity: 0.6;
+        transform: scale(1.2);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.5);
+      }
+    }
+
+    /* Pencere Stilleri */
+    .garden-window {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 300px;
+      background: linear-gradient(to bottom, #87ceeb 0%, #98fb98 100%);
+      border: 8px solid #8b4513;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.3);
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    .garden-soil {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 60px;
+      background: linear-gradient(to bottom, #8b4513, #654321);
+      border-radius: 0 0 10px 10px;
+    }
+
+    .garden-flower {
+      position: absolute;
+      bottom: 60px;
+    }
+
+    .stem {
+      width: 4px;
+      background: linear-gradient(to bottom, #228b22, #006400);
+      position: absolute;
+      bottom: 0;
+      left: 23px;
+      transform-origin: bottom;
+      animation: growStem 2s ease-out forwards;
+    }
+
+    .leaf {
+      position: absolute;
+      width: 15px;
+      height: 8px;
+      background: #32cd32;
+      border-radius: 50% 0;
+      transform-origin: right center;
+      opacity: 0;
+    }
+
+    .leaf.left {
+      left: 10px;
+      transform: rotate(-45deg) scale(0);
+      animation: growLeaf 1s ease-out 1s forwards;
+    }
+
+    .leaf.right {
+      right: 10px;
+      transform: rotate(45deg) scale(0);
+      animation: growLeaf 1s ease-out 1.2s forwards;
+    }
+
+    .garden-flower-head {
+      position: absolute;
+      top: -90px;
+      left: 15px;
+      width: 20px;
+      height: 20px;
+      opacity: 0;
+      transform: scale(0);
+      animation: bloomFlower 1.5s ease-out 2.5s forwards;
+    }
+
+    .garden-petal {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      transform-origin: center;
+    }
+
+    .garden-petal:nth-child(1) { top: -4px; left: 6px; }
+    .garden-petal:nth-child(2) { top: 6px; left: -4px; }
+    .garden-petal:nth-child(3) { top: 6px; right: -4px; }
+    .garden-petal:nth-child(4) { bottom: -4px; left: 6px; }
+
+    .garden-center {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #ffd700;
+      border-radius: 50%;
+      top: 7px;
+      left: 7px;
+    }
+
+    @keyframes growStem {
+      0% { height: 0px; }
+      100% { height: 80px; }
+    }
+
+    @keyframes growLeaf {
+      0% {
+        transform: rotate(-45deg) scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: rotate(-45deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .leaf.right {
+      animation: growLeafRight 1s ease-out 1.2s forwards;
+    }
+
+    @keyframes growLeafRight {
+      0% {
+        transform: rotate(45deg) scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: rotate(45deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes bloomFlower {
+      0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.3) rotate(180deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1) rotate(360deg);
+        opacity: 1;
+      }
+    }
+
+    .window-title {
+      position: absolute;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.9);
+      padding: 5px 15px;
+      border-radius: 10px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #333;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Güneş */
+    .sun {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(circle, #ffd700, #ffb347);
+      border-radius: 50%;
+      box-shadow: 0 0 15px #ffd700;
+      animation: sunRotate 10s linear infinite;
+      z-index: 1001;
+    }
+
+    .sun::before {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      right: -15px;
+      bottom: -15px;
+      background: repeating-conic-gradient(
+        from 0deg,
+        transparent 0deg 10deg,
+        rgba(255, 215, 0, 0.3) 10deg 20deg
+      );
+      border-radius: 50%;
+      animation: sunRays 8s linear infinite reverse;
+    }
+
+    @keyframes sunRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes sunRays {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    
+    .love-text {
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Georgia', serif;
+      font-size: 32px;
+      color: #ff1493;
+      text-shadow: 
+        2px 2px 4px rgba(0,0,0,0.3),
+        -1px -1px 2px rgba(255,255,255,0.8);
+      text-align: center;
+      z-index: 100;
+      animation: textGlow 3s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes textGlow {
+      0% { 
+        text-shadow: 
+          2px 2px 4px rgba(0,0,0,0.3),
+          -1px -1px 2px rgba(255,255,255,0.8);
+      }
+      100% { 
+        text-shadow: 
+          2px 2px 8px rgba(255,20,147,0.6),
+          -1px -1px 4px rgba(255,255,255,1),
+          0 0 15px rgba(255,20,147,0.4);
+      }
+    }
+  </style>
+</head>
+<body>
+ 
+  <div class="love-text">Çiçeklerin En Güzeli İçin</div>
+
+  
+  <div class="garden-window">
+   
+    <div class="sun"></div>
+    
+    <div class="window-title">🌸 Çiçek Bahçesi 🌸</div>
+    <div class="garden-soil"></div>
+    <div id="garden-container"></div>
+  </div>
+
+  <script>
+    function createFlower() {
+      const flower = document.createElement("div");
+      flower.classList.add("flower");
+
+      
+      const colors = ["#ffb6c1", "#dda0dd", "#e6e6fa", "#ff69b4", "#db7093", "#da70d6", "#ba55d3", "#9370db", "#8b008b"];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+
+      
+      for (let i = 0; i < 4; i++) {
+        const petal = document.createElement("div");
+        petal.classList.add("petal");
+        petal.style.backgroundColor = color;
+        
+        
+        const variation = Math.random() * 0.2 - 0.1; 
+        petal.style.filter = `brightness(${1 + variation}) saturate(${1.2 + variation})`;
+        
+        flower.appendChild(petal);
+      }
+
+   
+      const center = document.createElement("div");
+      center.classList.add("center");
+      flower.appendChild(center);
+
+      flower.style.left = Math.random() * (window.innerWidth - 50) + "px";
+      document.body.appendChild(flower);
+
+      setTimeout(() => {
+        flower.remove();
+      }, 8000);
+    }
+
+    function createGardenFlower() {
+      const container = document.getElementById('garden-container');
+      const gardenFlower = document.createElement("div");
+      gardenFlower.classList.add("garden-flower");
+      
+      
+      const leftPosition = Math.random() * 340 + 30; 
+      gardenFlower.style.left = leftPosition + "px";
+      
+      
+      const stem = document.createElement("div");
+      stem.classList.add("stem");
+      
+      
+      const leftLeaf = document.createElement("div");
+      leftLeaf.classList.add("leaf", "left");
+      leftLeaf.style.bottom = "30px";
+      
+      const rightLeaf = document.createElement("div");
+      rightLeaf.classList.add("leaf", "right");
+      rightLeaf.style.bottom = "40px";
+      
+      
+      const flowerHead = document.createElement("div");
+      flowerHead.classList.add("garden-flower-head");
+      
+      
+      const gardenColors = ["#ff69b4", "#dda0dd", "#ba55d3", "#9370db", "#da70d6"];
+      const flowerColor = gardenColors[Math.floor(Math.random() * gardenColors.length)];
+      
+      
+      for (let i = 0; i < 4; i++) {
+        const petal = document.createElement("div");
+        petal.classList.add("garden-petal");
+        petal.style.backgroundColor = flowerColor;
+        flowerHead.appendChild(petal);
+      }
+      
+      
+      const center = document.createElement("div");
+      center.classList.add("garden-center");
+      flowerHead.appendChild(center);
+      
+      
+      gardenFlower.appendChild(stem);
+      gardenFlower.appendChild(leftLeaf);
+      gardenFlower.appendChild(rightLeaf);
+      gardenFlower.appendChild(flowerHead);
+      
+      container.appendChild(gardenFlower);
+      
+      
+      setTimeout(() => {
+        gardenFlower.remove();
+      }, 8000);
+    }
+
+    
+    setInterval(createFlower, 500);
+    
+    
+    setInterval(createGardenFlower, 2000);
+    
+    
+    setTimeout(createGardenFlower, 1000);
+  </script>
+</body>
+</html>
